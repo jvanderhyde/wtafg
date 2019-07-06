@@ -37,14 +37,6 @@ public class FightingGame
                 r.setX(r.getX()+2);
         }        
         
-        //Blank screen
-        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        
-        //Draw everything
-        for (Entity e:game.getEntities(Component.hitbox))
-        {
-            Rectangle r = (Rectangle)game.getComponent(e, Component.hitbox);
-            gc.strokeRect(r.getX(), r.getY(), r.getWidth(), r.getHeight());
-        }
+        GraphicsSystem.render(game, gc);
     }
 }
