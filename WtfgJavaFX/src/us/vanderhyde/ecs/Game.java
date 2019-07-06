@@ -45,4 +45,12 @@ public class Game<Component>
         //and mark dirty when necessary.
     }
     
+    @Override
+    public String toString()
+    {
+        String s = "[ ";
+        for (Entity e:entities.values())
+            s = s.concat(e.toString()+" ");
+        return s.concat("]");
+    }
 }
