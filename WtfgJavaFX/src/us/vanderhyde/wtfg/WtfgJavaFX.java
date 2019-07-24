@@ -39,7 +39,7 @@ public class WtfgJavaFX extends Application
             }
         }.start();
         
-        primaryStage.setTitle("World's Tiniest Fighting Game");
+        primaryStage.setTitle("World's Tiniest Arena Fighting Game");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
