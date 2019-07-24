@@ -41,6 +41,12 @@ public class FightingGame
         game.addComponent(player2, Component.name, "Player 2");
         game.addComponent(player2, Component.hitbox, new Rectangle(200,600,20,50));
         game.addComponent(player2, Component.playerControl, new PlayerControlComponent("A","D","W"));
+
+        Entity<Component> dummy = new Entity<>();
+        game.addEntity(dummy);
+        game.addComponent(dummy, Component.name, "Dummy player");
+        game.addComponent(dummy, Component.hitbox, new Rectangle(450,600,20,50));
+        game.addComponent(dummy, Component.aiControl, new AIControlComponent());
     }
     
     public void update(long delta, Collection<String> input, GraphicsContext gc)

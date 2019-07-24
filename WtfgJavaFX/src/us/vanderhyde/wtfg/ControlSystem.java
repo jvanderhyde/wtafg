@@ -27,7 +27,14 @@ public class ControlSystem
         //Update physics based on AI control
         for (Entity e:g.getEntities(Component.aiControl))
         {
-        }        
+            Rectangle r = (Rectangle)g.getComponent(e, Component.hitbox);
+            AIControlComponent control = (AIControlComponent)g.getComponent(e, Component.aiControl);
+            control.update();
+            if (control.getState()==AIControlComponent.State.movingLeft)
+                r.setX(r.getX()-2);
+            if (control.getState()==AIControlComponent.State.movingRight)
+                r.setX(r.getX()+2);
+        }
     }
     
 }
