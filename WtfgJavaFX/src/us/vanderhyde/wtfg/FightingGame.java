@@ -24,7 +24,7 @@ import us.vanderhyde.ecs.Game;
 public class FightingGame
 {
     public static enum Component {
-        hitbox, name, playerControl, aiControl
+        hitbox, name, playerControl, aiControl, combatPose
     };
     private final Game<Component> game = new Game<>();
     
@@ -34,13 +34,14 @@ public class FightingGame
         game.addEntity(player1);
         game.addComponent(player1, Component.name, "Player 1");
         game.addComponent(player1, Component.hitbox, new Rectangle(10,600,20,50));
-        game.addComponent(player1, Component.playerControl, new PlayerControlComponent("LEFT","RIGHT","UP"));
+        game.addComponent(player1, Component.playerControl, new PlayerControlComponent("LEFT","RIGHT","UP","DOWN"));
+        game.addComponent(player1, Component.combatPose, new CombatPoseComponent(CombatSystem.Pose.block));
 
         Entity<Component> player2 = new Entity<>();
         game.addEntity(player2);
         game.addComponent(player2, Component.name, "Player 2");
         game.addComponent(player2, Component.hitbox, new Rectangle(200,600,20,50));
-        game.addComponent(player2, Component.playerControl, new PlayerControlComponent("A","D","W"));
+        game.addComponent(player2, Component.playerControl, new PlayerControlComponent("A","D","W","S"));
 
         Entity<Component> dummy = new Entity<>();
         game.addEntity(dummy);
@@ -52,6 +53,7 @@ public class FightingGame
     public void update(long delta, Collection<String> input, GraphicsContext gc)
     {
         ControlSystem.update(game, input);
+        CombatSystem.update(game);
         GraphicsSystem.render(game, gc);
     }
 }

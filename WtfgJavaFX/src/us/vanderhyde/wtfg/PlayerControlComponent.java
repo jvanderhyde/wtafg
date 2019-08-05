@@ -5,12 +5,13 @@ package us.vanderhyde.wtfg;
 
 public class PlayerControlComponent
 {
-    public final String left, right, attack;
+    public final String left, right, attack, flip;
 
-    public PlayerControlComponent(String left, String right, String attack)
+    public PlayerControlComponent(String left, String right, String attack, String flip)
     {
         this.left = left;
         this.right = right;
         this.attack = attack;
+        this.flip = flip;
     }
 }

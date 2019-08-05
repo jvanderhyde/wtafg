@@ -23,6 +23,11 @@ public class Game<Component>
         e.components.put(c, data);
     }
     
+    public void removeComonent(Entity e, Component c)
+    {
+        e.components.remove(c);
+    }
+    
     public Object getComponent(Entity e, Component c)
     {
         return e.components.get(c);
