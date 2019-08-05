@@ -18,7 +18,7 @@ public class ControlSystem
         {
             PlayerControlComponent control = (PlayerControlComponent)g.getComponent(e, Component.playerControl);
             
-            //Draw a rectangle
+            //Move the rectangle
             Rectangle r = (Rectangle)g.getComponent(e, Component.hitbox);
             if (r != null)
             {
