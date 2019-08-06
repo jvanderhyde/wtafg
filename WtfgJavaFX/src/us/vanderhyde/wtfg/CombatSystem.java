@@ -3,9 +3,10 @@
 
 package us.vanderhyde.wtfg;
 
+import java.util.Map;
 import us.vanderhyde.ecs.Entity;
 import us.vanderhyde.ecs.Game;
-import us.vanderhyde.wtfg.FightingGame.Component;
+import us.vanderhyde.wtfg.FightingGame.ComponentType;
 
 public class CombatSystem
 {
@@ -38,19 +39,19 @@ public class CombatSystem
         }
     };
     
-    public static void update(Game<Component> g)
+    public static void update(Game<ComponentType> g)
     {
-        for (Entity e:g.getEntities(Component.combatPose))
+        for (Map.Entry<Entity,Object> e:g.getEntities(ComponentType.combatPose))
         {
-            CombatPoseComponent c = (CombatPoseComponent)g.getComponent(e, Component.combatPose);
+            CombatPoseComponent c = (CombatPoseComponent)e.getValue();
             if (c.attack && c.pose==Pose.block)
-                g.addComponent(e, Component.combatPose, new CombatPoseComponent(Pose.prepareAttack));
+                g.addComponent(e.getKey(), ComponentType.combatPose, new CombatPoseComponent(Pose.prepareAttack));
             else
             {
                 //Check for expiration of current pose
                 c.timeLeft--;
                 if (c.timeLeft <= 0)
-                    g.addComponent(e, Component.combatPose, new CombatPoseComponent(c.pose.onExpire));
+                    g.addComponent(e.getKey(), ComponentType.combatPose, new CombatPoseComponent(c.pose.onExpire));
             }
         }
     }

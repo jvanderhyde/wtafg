@@ -3,34 +3,40 @@
 
 package us.vanderhyde.ecs;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Game<Component>
+public class Game<ComponentType>
 {
     private final Map<UUID,Entity> entities = new HashMap<>();
+    private final Map<ComponentType,Map<Entity,Object>> components = new HashMap<>();
     
     public void addEntity(Entity e)
     {
         entities.put(e.id, e);
     }
     
-    public void addComponent(Entity e, Component c, Object data)
+    public void addComponent(Entity e, ComponentType c, Object data)
     {
-        e.components.put(c, data);
+        Map<Entity,Object> m = this.components.get(c);
+        if (m==null)
+        {
+            this.components.put(c, new HashMap<>());
+            m = this.components.get(c);
+        }
+        m.put(e, data);
     }
     
-    public void removeComonent(Entity e, Component c)
+    public void removeComonent(Entity e, ComponentType c)
     {
-        e.components.remove(c);
+        this.components.get(c).remove(e);
     }
     
-    public Object getComponent(Entity e, Component c)
+    public Object getComponent(Entity e, ComponentType c)
     {
-        return e.components.get(c);
+        return this.components.get(c).get(e);
     }
 
     public Collection<Entity> getEntities()
@@ -38,16 +44,9 @@ public class Game<Component>
         return entities.values();
     }
     
-    public Collection<Entity> getEntities(Component c)
+    public Collection<Map.Entry<Entity,Object>> getEntities(ComponentType c)
     {
-        ArrayList<Entity> r = new ArrayList<>();
-        for (Entity e:entities.values())
-            if (e.components.get(c) != null)
-                r.add(e);
-        return r;
-        //This will be inefficient, to filter the whole list
-        //every time. Better to cache them by component
-        //and mark dirty when necessary.
+        return this.components.get(c).entrySet();
     }
     
     @Override
@@ -55,7 +54,12 @@ public class Game<Component>
     {
         String s = "[ ";
         for (Entity e:entities.values())
-            s = s.concat(e.toString()+" ");
+            for (ComponentType c:components.keySet())
+            {
+                Object o = components.get(c).get(e);
+                if (o != null)
+                    s = s.concat(o.toString()+" ");
+            }
         return s.concat("]");
     }
 }

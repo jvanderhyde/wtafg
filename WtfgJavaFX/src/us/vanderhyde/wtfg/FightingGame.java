@@ -23,31 +23,31 @@ import us.vanderhyde.ecs.Game;
  */
 public class FightingGame
 {
-    public static enum Component {
+    public static enum ComponentType {
         hitbox, name, playerControl, aiControl, combatPose
     };
-    private final Game<Component> game = new Game<>();
+    private final Game<ComponentType> game = new Game<>();
     
     public FightingGame()
     {
-        Entity<Component> player1 = new Entity<>();
+        Entity<ComponentType> player1 = new Entity<>();
         game.addEntity(player1);
-        game.addComponent(player1, Component.name, "Player 1");
-        game.addComponent(player1, Component.hitbox, new Rectangle(10,600,20,50));
-        game.addComponent(player1, Component.playerControl, new PlayerControlComponent("LEFT","RIGHT","UP","DOWN"));
-        game.addComponent(player1, Component.combatPose, new CombatPoseComponent(CombatSystem.Pose.block));
+        game.addComponent(player1, ComponentType.name, "Player 1");
+        game.addComponent(player1, ComponentType.hitbox, new Rectangle(10,600,20,50));
+        game.addComponent(player1, ComponentType.playerControl, new PlayerControlComponent("LEFT","RIGHT","UP","DOWN"));
+        game.addComponent(player1, ComponentType.combatPose, new CombatPoseComponent(CombatSystem.Pose.block));
 
-        Entity<Component> player2 = new Entity<>();
+        Entity<ComponentType> player2 = new Entity<>();
         game.addEntity(player2);
-        game.addComponent(player2, Component.name, "Player 2");
-        game.addComponent(player2, Component.hitbox, new Rectangle(200,600,20,50));
-        game.addComponent(player2, Component.playerControl, new PlayerControlComponent("A","D","W","S"));
+        game.addComponent(player2, ComponentType.name, "Player 2");
+        game.addComponent(player2, ComponentType.hitbox, new Rectangle(200,600,20,50));
+        game.addComponent(player2, ComponentType.playerControl, new PlayerControlComponent("A","D","W","S"));
 
-        Entity<Component> dummy = new Entity<>();
+        Entity<ComponentType> dummy = new Entity<>();
         game.addEntity(dummy);
-        game.addComponent(dummy, Component.name, "Dummy player");
-        game.addComponent(dummy, Component.hitbox, new Rectangle(450,600,20,50));
-        game.addComponent(dummy, Component.aiControl, new AIControlComponent());
+        game.addComponent(dummy, ComponentType.name, "Dummy player");
+        game.addComponent(dummy, ComponentType.hitbox, new Rectangle(450,600,20,50));
+        game.addComponent(dummy, ComponentType.aiControl, new AIControlComponent());
     }
     
     public void update(long delta, Collection<String> input, GraphicsContext gc)

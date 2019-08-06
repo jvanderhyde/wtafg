@@ -4,22 +4,23 @@
 package us.vanderhyde.wtfg;
 
 import java.util.Collection;
+import java.util.Map;
 import javafx.scene.shape.Rectangle;
 import us.vanderhyde.ecs.Entity;
 import us.vanderhyde.ecs.Game;
-import us.vanderhyde.wtfg.FightingGame.Component;
+import us.vanderhyde.wtfg.FightingGame.ComponentType;
 
 public class ControlSystem
 {
-    public static void update(Game<Component> g, Collection<String> input)
+    public static void update(Game<ComponentType> g, Collection<String> input)
     {
         //Update physics based on user input
-        for (Entity e:g.getEntities(Component.playerControl))
+        for (Map.Entry<Entity,Object> e:g.getEntities(ComponentType.playerControl))
         {
-            PlayerControlComponent control = (PlayerControlComponent)g.getComponent(e, Component.playerControl);
+            PlayerControlComponent control = (PlayerControlComponent)e.getValue();
             
             //Move the rectangle
-            Rectangle r = (Rectangle)g.getComponent(e, Component.hitbox);
+            Rectangle r = (Rectangle)g.getComponent(e.getKey(), ComponentType.hitbox);
             if (r != null)
             {
                 if (input.contains(control.left))
@@ -29,7 +30,7 @@ public class ControlSystem
             }
             
             //Add attack controls
-            CombatPoseComponent pose = (CombatPoseComponent)g.getComponent(e, Component.combatPose);
+            CombatPoseComponent pose = (CombatPoseComponent)g.getComponent(e.getKey(), ComponentType.combatPose);
             if (pose != null)
             {
                 pose.setInput(input.contains(control.left), input.contains(control.right), input.contains(control.attack), input.contains(control.flip));
@@ -37,10 +38,10 @@ public class ControlSystem
         }  
         
         //Update physics based on AI control
-        for (Entity e:g.getEntities(Component.aiControl))
+        for (Map.Entry<Entity,Object> e:g.getEntities(ComponentType.aiControl))
         {
-            Rectangle r = (Rectangle)g.getComponent(e, Component.hitbox);
-            AIControlComponent control = (AIControlComponent)g.getComponent(e, Component.aiControl);
+            AIControlComponent control = (AIControlComponent)e.getValue();
+            Rectangle r = (Rectangle)g.getComponent(e.getKey(), ComponentType.hitbox);
             control.update();
             if (control.getState()==AIControlComponent.State.movingLeft)
                 r.setX(r.getX()-2);
