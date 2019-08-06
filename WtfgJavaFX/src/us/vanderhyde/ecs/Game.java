@@ -23,8 +23,8 @@ public class Game<ComponentType>
         Map<Entity,Object> m = this.components.get(c);
         if (m==null)
         {
-            this.components.put(c, new HashMap<>());
-            m = this.components.get(c);
+            m = new HashMap<>();
+            this.components.put(c, m);
         }
         m.put(e, data);
     }
