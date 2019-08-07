@@ -42,8 +42,8 @@ public class CombatSystem
     public static void update(Game<ComponentType> g)
     {
         //Set up mappers for components we will use
-        Game<ComponentType>.ComponentMapper<CombatPoseComponent> cm;
-        cm = g.new ComponentMapper<>(ComponentType.combatPose,CombatPoseComponent.class);
+        Game<ComponentType>.CompMap<CombatPoseComponent> cm;
+        cm = g.new CompMap<>(ComponentType.combatPose,CombatPoseComponent.class);
 
         for (Entity e:cm.getEntities())
         {

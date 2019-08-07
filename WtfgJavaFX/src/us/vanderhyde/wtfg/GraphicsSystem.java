@@ -16,10 +16,10 @@ public class GraphicsSystem
     public static void render(Game<ComponentType> g, GraphicsContext gc)
     {
         //Set up mappers for components we will use
-        Game<ComponentType>.ComponentMapper<Rectangle> hm;
-        hm = g.new ComponentMapper<>(ComponentType.hitbox,Rectangle.class);
-        Game<ComponentType>.ComponentMapper<CombatPoseComponent> cm;
-        cm = g.new ComponentMapper<>(ComponentType.combatPose,CombatPoseComponent.class);
+        Game<ComponentType>.CompMap<Rectangle> hm;
+        hm = g.new CompMap<>(ComponentType.hitbox,Rectangle.class);
+        Game<ComponentType>.CompMap<CombatPoseComponent> cm;
+        cm = g.new CompMap<>(ComponentType.combatPose,CombatPoseComponent.class);
 
         //Blank screen
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());

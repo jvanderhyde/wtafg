@@ -51,11 +51,11 @@ public class Game<ComponentType>
     }
 
     //Used for type checking component data
-    public class ComponentMapper<T>
+    public class CompMap<T>
     {
         ComponentType type;
         
-        public ComponentMapper(ComponentType type, Class<T> componentClass)
+        public CompMap(ComponentType type, Class<T> componentClass)
         {
             this.type = type;
         }

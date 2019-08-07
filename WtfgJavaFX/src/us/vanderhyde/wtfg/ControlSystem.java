@@ -15,14 +15,14 @@ public class ControlSystem
     public static void update(Game<ComponentType> g, Collection<String> input)
     {
         //Set up mappers for components we will use
-        Game<ComponentType>.ComponentMapper<Rectangle> hm;
-        hm = g.new ComponentMapper<>(ComponentType.hitbox,Rectangle.class);
-        Game<ComponentType>.ComponentMapper<CombatPoseComponent> cm;
-        cm = g.new ComponentMapper<>(ComponentType.combatPose,CombatPoseComponent.class);
-        Game<ComponentType>.ComponentMapper<PlayerControlComponent> pm;
-        pm = g.new ComponentMapper<>(ComponentType.playerControl,PlayerControlComponent.class);
-        Game<ComponentType>.ComponentMapper<AIControlComponent> am;
-        am = g.new ComponentMapper<>(ComponentType.aiControl,AIControlComponent.class);
+        Game<ComponentType>.CompMap<Rectangle> hm;
+        hm = g.new CompMap<>(ComponentType.hitbox,Rectangle.class);
+        Game<ComponentType>.CompMap<CombatPoseComponent> cm;
+        cm = g.new CompMap<>(ComponentType.combatPose,CombatPoseComponent.class);
+        Game<ComponentType>.CompMap<PlayerControlComponent> pm;
+        pm = g.new CompMap<>(ComponentType.playerControl,PlayerControlComponent.class);
+        Game<ComponentType>.CompMap<AIControlComponent> am;
+        am = g.new CompMap<>(ComponentType.aiControl,AIControlComponent.class);
         
         //Update physics based on user input
         for (Entity e:pm.getEntities())

@@ -31,16 +31,16 @@ public class FightingGame
     public FightingGame()
     {
         //Set up mappers for components we will use
-        Game<ComponentType>.ComponentMapper<Rectangle> hm;
-        hm = game.new ComponentMapper<>(ComponentType.hitbox,Rectangle.class);
-        Game<ComponentType>.ComponentMapper<String> nm;
-        nm = game.new ComponentMapper<>(ComponentType.name,String.class);
-        Game<ComponentType>.ComponentMapper<CombatPoseComponent> cm;
-        cm = game.new ComponentMapper<>(ComponentType.combatPose,CombatPoseComponent.class);
-        Game<ComponentType>.ComponentMapper<PlayerControlComponent> pm;
-        pm = game.new ComponentMapper<>(ComponentType.playerControl,PlayerControlComponent.class);
-        Game<ComponentType>.ComponentMapper<AIControlComponent> am;
-        am = game.new ComponentMapper<>(ComponentType.aiControl,AIControlComponent.class);
+        Game<ComponentType>.CompMap<Rectangle> hm;
+        hm = game.new CompMap<>(ComponentType.hitbox,Rectangle.class);
+        Game<ComponentType>.CompMap<String> nm;
+        nm = game.new CompMap<>(ComponentType.name,String.class);
+        Game<ComponentType>.CompMap<CombatPoseComponent> cm;
+        cm = game.new CompMap<>(ComponentType.combatPose,CombatPoseComponent.class);
+        Game<ComponentType>.CompMap<PlayerControlComponent> pm;
+        pm = game.new CompMap<>(ComponentType.playerControl,PlayerControlComponent.class);
+        Game<ComponentType>.CompMap<AIControlComponent> am;
+        am = game.new CompMap<>(ComponentType.aiControl,AIControlComponent.class);
 
         Entity player1 = new Entity();
         game.addEntity(player1);
