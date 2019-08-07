@@ -5,7 +5,7 @@ package us.vanderhyde.ecs;
 
 import java.util.UUID;
 
-public class Entity<Component>
+public class Entity
 {
     final UUID id = UUID.randomUUID();
 }

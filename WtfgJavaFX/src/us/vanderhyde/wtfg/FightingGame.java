@@ -42,20 +42,20 @@ public class FightingGame
         Game<ComponentType>.ComponentMapper<AIControlComponent> am;
         am = game.new ComponentMapper<>(ComponentType.aiControl,AIControlComponent.class);
 
-        Entity<ComponentType> player1 = new Entity<>();
+        Entity player1 = new Entity();
         game.addEntity(player1);
         nm.add(player1, "Player 1");
         hm.add(player1, new Rectangle(10,600,20,50));
         pm.add(player1, new PlayerControlComponent("LEFT","RIGHT","UP","DOWN"));
         cm.add(player1, new CombatPoseComponent(CombatSystem.Pose.block));
 
-        Entity<ComponentType> player2 = new Entity<>();
+        Entity player2 = new Entity();
         game.addEntity(player2);
         nm.add(player2, "Player 2");
         hm.add(player2, new Rectangle(200,600,20,50));
         pm.add(player2, new PlayerControlComponent("A","D","W","S"));
 
-        Entity<ComponentType> dummy = new Entity<>();
+        Entity dummy = new Entity();
         game.addEntity(dummy);
         nm.add(dummy, "Dummy player");
         hm.add(dummy, new Rectangle(450,600,20,50));
