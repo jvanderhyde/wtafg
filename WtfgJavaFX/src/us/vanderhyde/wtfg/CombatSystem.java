@@ -41,17 +41,21 @@ public class CombatSystem
     
     public static void update(Game<ComponentType> g)
     {
-        for (Map.Entry<Entity,Object> e:g.getEntities(ComponentType.combatPose))
+        //Set up mappers for components we will use
+        Game<ComponentType>.ComponentMapper<CombatPoseComponent> cm;
+        cm = g.new ComponentMapper<>(ComponentType.combatPose,CombatPoseComponent.class);
+
+        for (Entity e:cm.getEntities())
         {
-            CombatPoseComponent c = (CombatPoseComponent)e.getValue();
+            CombatPoseComponent c = cm.get(e);
             if (c.attack && c.pose==Pose.block)
-                g.addComponent(e.getKey(), ComponentType.combatPose, new CombatPoseComponent(Pose.prepareAttack));
+                cm.add(e, new CombatPoseComponent(Pose.prepareAttack));
             else
             {
                 //Check for expiration of current pose
                 c.timeLeft--;
                 if (c.timeLeft <= 0)
-                    g.addComponent(e.getKey(), ComponentType.combatPose, new CombatPoseComponent(c.pose.onExpire));
+                    cm.add(e, new CombatPoseComponent(c.pose.onExpire));
             }
         }
     }

@@ -18,7 +18,7 @@ public class Game<ComponentType>
         entities.put(e.id, e);
     }
     
-    public void addComponent(Entity e, ComponentType c, Object data)
+    private void addComponent(Entity e, ComponentType c, Object data)
     {
         Map<Entity,Object> m = this.components.get(c);
         if (m==null)
@@ -29,12 +29,12 @@ public class Game<ComponentType>
         m.put(e, data);
     }
     
-    public void removeComonent(Entity e, ComponentType c)
+    private void removeComponent(Entity e, ComponentType c)
     {
         this.components.get(c).remove(e);
     }
     
-    public Object getComponent(Entity e, ComponentType c)
+    private Object getComponent(Entity e, ComponentType c)
     {
         return this.components.get(c).get(e);
     }
@@ -44,9 +44,42 @@ public class Game<ComponentType>
         return entities.values();
     }
     
+    //This is the fastest way to get all the components, but the code is ugly.
     public Collection<Map.Entry<Entity,Object>> getEntities(ComponentType c)
     {
         return this.components.get(c).entrySet();
+    }
+
+    //Used for type checking component data
+    public class ComponentMapper<T>
+    {
+        ComponentType type;
+        
+        public ComponentMapper(ComponentType type, Class<T> componentClass)
+        {
+            this.type = type;
+        }
+
+        @SuppressWarnings("unchecked") //The component is stored as an Object
+        public T get(Entity e)
+        {
+            return (T)getComponent(e,type);
+        }
+        
+        public void add(Entity e, T data)
+        {
+            addComponent(e, type, data);
+        }
+        
+        public void remove(Entity e)
+        {
+            removeComponent(e,type);
+        }
+        
+        public Collection<Entity> getEntities()
+        {
+            return components.get(type).keySet();
+        }
     }
     
     @Override

@@ -15,14 +15,20 @@ public class GraphicsSystem
 {
     public static void render(Game<ComponentType> g, GraphicsContext gc)
     {
+        //Set up mappers for components we will use
+        Game<ComponentType>.ComponentMapper<Rectangle> hm;
+        hm = g.new ComponentMapper<>(ComponentType.hitbox,Rectangle.class);
+        Game<ComponentType>.ComponentMapper<CombatPoseComponent> cm;
+        cm = g.new ComponentMapper<>(ComponentType.combatPose,CombatPoseComponent.class);
+
         //Blank screen
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         
         //Draw everything
-        for (Map.Entry<Entity,Object> e:g.getEntities(ComponentType.hitbox))
+        for (Entity e:hm.getEntities())
         {
-            Rectangle r = (Rectangle)e.getValue();
-            CombatPoseComponent c = (CombatPoseComponent)g.getComponent(e.getKey(), ComponentType.combatPose);
+            Rectangle r = hm.get(e);
+            CombatPoseComponent c = cm.get(e);
             if (c != null)
             {
                 gc.setStroke(Color.BLUE);

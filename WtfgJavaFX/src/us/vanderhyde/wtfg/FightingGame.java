@@ -30,24 +30,36 @@ public class FightingGame
     
     public FightingGame()
     {
+        //Set up mappers for components we will use
+        Game<ComponentType>.ComponentMapper<Rectangle> hm;
+        hm = game.new ComponentMapper<>(ComponentType.hitbox,Rectangle.class);
+        Game<ComponentType>.ComponentMapper<String> nm;
+        nm = game.new ComponentMapper<>(ComponentType.name,String.class);
+        Game<ComponentType>.ComponentMapper<CombatPoseComponent> cm;
+        cm = game.new ComponentMapper<>(ComponentType.combatPose,CombatPoseComponent.class);
+        Game<ComponentType>.ComponentMapper<PlayerControlComponent> pm;
+        pm = game.new ComponentMapper<>(ComponentType.playerControl,PlayerControlComponent.class);
+        Game<ComponentType>.ComponentMapper<AIControlComponent> am;
+        am = game.new ComponentMapper<>(ComponentType.aiControl,AIControlComponent.class);
+
         Entity<ComponentType> player1 = new Entity<>();
         game.addEntity(player1);
-        game.addComponent(player1, ComponentType.name, "Player 1");
-        game.addComponent(player1, ComponentType.hitbox, new Rectangle(10,600,20,50));
-        game.addComponent(player1, ComponentType.playerControl, new PlayerControlComponent("LEFT","RIGHT","UP","DOWN"));
-        game.addComponent(player1, ComponentType.combatPose, new CombatPoseComponent(CombatSystem.Pose.block));
+        nm.add(player1, "Player 1");
+        hm.add(player1, new Rectangle(10,600,20,50));
+        pm.add(player1, new PlayerControlComponent("LEFT","RIGHT","UP","DOWN"));
+        cm.add(player1, new CombatPoseComponent(CombatSystem.Pose.block));
 
         Entity<ComponentType> player2 = new Entity<>();
         game.addEntity(player2);
-        game.addComponent(player2, ComponentType.name, "Player 2");
-        game.addComponent(player2, ComponentType.hitbox, new Rectangle(200,600,20,50));
-        game.addComponent(player2, ComponentType.playerControl, new PlayerControlComponent("A","D","W","S"));
+        nm.add(player2, "Player 2");
+        hm.add(player2, new Rectangle(200,600,20,50));
+        pm.add(player2, new PlayerControlComponent("A","D","W","S"));
 
         Entity<ComponentType> dummy = new Entity<>();
         game.addEntity(dummy);
-        game.addComponent(dummy, ComponentType.name, "Dummy player");
-        game.addComponent(dummy, ComponentType.hitbox, new Rectangle(450,600,20,50));
-        game.addComponent(dummy, ComponentType.aiControl, new AIControlComponent());
+        nm.add(dummy, "Dummy player");
+        hm.add(dummy, new Rectangle(450,600,20,50));
+        am.add(dummy, new AIControlComponent());
     }
     
     public void update(long delta, Collection<String> input, GraphicsContext gc)
