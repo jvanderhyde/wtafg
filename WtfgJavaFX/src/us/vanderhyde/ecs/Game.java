@@ -8,17 +8,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Game<ComponentType>
+public class Game
 {
     private final Map<UUID,Entity> entities = new HashMap<>();
-    private final Map<ComponentType,Map<Entity,Object>> components = new HashMap<>();
+    private final Map<Class,Map<Entity,Object>> components = new HashMap<>();
     
     public void addEntity(Entity e)
     {
         entities.put(e.id, e);
     }
     
-    private void addComponent(Entity e, ComponentType c, Object data)
+    public <T> void add(Entity e, Class<T> c, T data)
     {
         Map<Entity,Object> m = this.components.get(c);
         if (m==null)
@@ -29,14 +29,15 @@ public class Game<ComponentType>
         m.put(e, data);
     }
     
-    private void removeComponent(Entity e, ComponentType c)
+    public void remove(Entity e, Class c)
     {
         this.components.get(c).remove(e);
     }
     
-    private Object getComponent(Entity e, ComponentType c)
+    @SuppressWarnings("unchecked") //The component is stored as an Object
+    public <T> T get(Entity e, Class<T> c)
     {
-        return this.components.get(c).get(e);
+        return (T)this.components.get(c).get(e);
     }
 
     public Collection<Entity> getEntities()
@@ -45,54 +46,31 @@ public class Game<ComponentType>
     }
     
     //This is the fastest way to get all the components, but the code is ugly.
-    public Collection<Map.Entry<Entity,Object>> getEntities(ComponentType c)
+    public <T> Collection<Map.Entry<Entity,Object>> getEntityEntries(Class<T> c)
     {
         return this.components.get(c).entrySet();
     }
 
-    //Used for type checking component data
-    public class CompMap<T>
+    public <T> Collection<Entity> getEntities(Class<T> c)
     {
-        ComponentType type;
-        
-        public CompMap(ComponentType type, Class<T> componentClass)
-        {
-            this.type = type;
-        }
-
-        @SuppressWarnings("unchecked") //The component is stored as an Object
-        public T get(Entity e)
-        {
-            return (T)getComponent(e,type);
-        }
-        
-        public void add(Entity e, T data)
-        {
-            addComponent(e, type, data);
-        }
-        
-        public void remove(Entity e)
-        {
-            removeComponent(e,type);
-        }
-        
-        public Collection<Entity> getEntities()
-        {
-            return components.get(type).keySet();
-        }
+        return this.components.get(c).keySet();
     }
-    
+
     @Override
     public String toString()
     {
         String s = "[ ";
         for (Entity e:entities.values())
-            for (ComponentType c:components.keySet())
+        {
+            s = s.concat("{ ");
+            for (Class c:components.keySet())
             {
                 Object o = components.get(c).get(e);
                 if (o != null)
                     s = s.concat(o.toString()+" ");
             }
+            s = s.concat("} ");
+        }
         return s.concat("]");
     }
 }

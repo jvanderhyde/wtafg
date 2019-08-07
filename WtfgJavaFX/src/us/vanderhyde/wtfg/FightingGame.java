@@ -23,43 +23,30 @@ import us.vanderhyde.ecs.Game;
  */
 public class FightingGame
 {
-    public static enum ComponentType {
-        hitbox, name, playerControl, aiControl, combatPose
-    };
-    private final Game<ComponentType> game = new Game<>();
+    private final Game game = new Game();
     
     public FightingGame()
     {
-        //Set up mappers for components we will use
-        Game<ComponentType>.CompMap<Rectangle> hm;
-        hm = game.new CompMap<>(ComponentType.hitbox,Rectangle.class);
-        Game<ComponentType>.CompMap<String> nm;
-        nm = game.new CompMap<>(ComponentType.name,String.class);
-        Game<ComponentType>.CompMap<CombatPoseComponent> cm;
-        cm = game.new CompMap<>(ComponentType.combatPose,CombatPoseComponent.class);
-        Game<ComponentType>.CompMap<PlayerControlComponent> pm;
-        pm = game.new CompMap<>(ComponentType.playerControl,PlayerControlComponent.class);
-        Game<ComponentType>.CompMap<AIControlComponent> am;
-        am = game.new CompMap<>(ComponentType.aiControl,AIControlComponent.class);
-
         Entity player1 = new Entity();
         game.addEntity(player1);
-        nm.add(player1, "Player 1");
-        hm.add(player1, new Rectangle(10,600,20,50));
-        pm.add(player1, new PlayerControlComponent("LEFT","RIGHT","UP","DOWN"));
-        cm.add(player1, new CombatPoseComponent(CombatSystem.Pose.block));
+        game.add(player1, String.class, "Player 1");
+        game.add(player1, Rectangle.class, new Rectangle(10,600,20,50));
+        game.add(player1, PlayerControlComponent.class, new PlayerControlComponent("LEFT","RIGHT","UP","DOWN"));
+        game.add(player1, CombatPoseComponent.class, new CombatPoseComponent(CombatSystem.Pose.block));
 
         Entity player2 = new Entity();
         game.addEntity(player2);
-        nm.add(player2, "Player 2");
-        hm.add(player2, new Rectangle(200,600,20,50));
-        pm.add(player2, new PlayerControlComponent("A","D","W","S"));
+        game.add(player2, String.class, "Player 2");
+        game.add(player2, Rectangle.class, new Rectangle(200,600,20,50));
+        game.add(player2, PlayerControlComponent.class, new PlayerControlComponent("A","D","W","S"));
 
         Entity dummy = new Entity();
         game.addEntity(dummy);
-        nm.add(dummy, "Dummy player");
-        hm.add(dummy, new Rectangle(450,600,20,50));
-        am.add(dummy, new AIControlComponent());
+        game.add(dummy, String.class, "Dummy player");
+        game.add(dummy, Rectangle.class, new Rectangle(450,600,20,50));
+        game.add(dummy, AIControlComponent.class, new AIControlComponent());
+        
+        System.out.println(game);
     }
     
     public void update(long delta, Collection<String> input, GraphicsContext gc)

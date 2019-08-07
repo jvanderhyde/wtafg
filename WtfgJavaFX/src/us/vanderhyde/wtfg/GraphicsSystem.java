@@ -3,32 +3,24 @@
 
 package us.vanderhyde.wtfg;
 
-import java.util.Map;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import us.vanderhyde.ecs.Entity;
 import us.vanderhyde.ecs.Game;
-import us.vanderhyde.wtfg.FightingGame.ComponentType;
 
 public class GraphicsSystem
 {
-    public static void render(Game<ComponentType> g, GraphicsContext gc)
+    public static void render(Game g, GraphicsContext gc)
     {
-        //Set up mappers for components we will use
-        Game<ComponentType>.CompMap<Rectangle> hm;
-        hm = g.new CompMap<>(ComponentType.hitbox,Rectangle.class);
-        Game<ComponentType>.CompMap<CombatPoseComponent> cm;
-        cm = g.new CompMap<>(ComponentType.combatPose,CombatPoseComponent.class);
-
         //Blank screen
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         
         //Draw everything
-        for (Entity e:hm.getEntities())
+        for (Entity e:g.getEntities(Rectangle.class))
         {
-            Rectangle r = hm.get(e);
-            CombatPoseComponent c = cm.get(e);
+            Rectangle r = g.get(e,Rectangle.class);
+            CombatPoseComponent c = g.get(e,CombatPoseComponent.class);
             if (c != null)
             {
                 gc.setStroke(Color.BLUE);
