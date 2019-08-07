@@ -42,7 +42,8 @@ public class CombatSystem
         for (Entity e:g.getEntities(CombatPoseComponent.class))
         {
             CombatPoseComponent c = g.get(e,CombatPoseComponent.class);
-            if (c.attack && c.pose==Pose.block)
+            CombatInputComponent n = g.get(e,CombatInputComponent.class);
+            if (n!=null && n.attack && c.pose==Pose.block)
                 g.add(e, new CombatPoseComponent(Pose.prepareAttack));
             else
             {

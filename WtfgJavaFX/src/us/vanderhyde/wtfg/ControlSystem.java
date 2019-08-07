@@ -31,7 +31,7 @@ public class ControlSystem
             CombatPoseComponent pose = g.get(e,CombatPoseComponent.class);
             if (pose != null)
             {
-                pose.setInput(input.contains(control.left), input.contains(control.right), input.contains(control.attack), input.contains(control.flip));
+                g.add(e, new CombatInputComponent(input.contains(control.left), input.contains(control.right), input.contains(control.attack), input.contains(control.flip)));
             }
         }  
         
