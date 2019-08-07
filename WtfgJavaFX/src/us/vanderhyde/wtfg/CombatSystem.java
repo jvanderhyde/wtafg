@@ -43,13 +43,13 @@ public class CombatSystem
         {
             CombatPoseComponent c = g.get(e,CombatPoseComponent.class);
             if (c.attack && c.pose==Pose.block)
-                g.add(e, CombatPoseComponent.class, new CombatPoseComponent(Pose.prepareAttack));
+                g.add(e, new CombatPoseComponent(Pose.prepareAttack));
             else
             {
                 //Check for expiration of current pose
                 c.timeLeft--;
                 if (c.timeLeft <= 0)
-                    g.add(e, CombatPoseComponent.class, new CombatPoseComponent(c.pose.onExpire));
+                    g.add(e, new CombatPoseComponent(c.pose.onExpire));
             }
         }
     }

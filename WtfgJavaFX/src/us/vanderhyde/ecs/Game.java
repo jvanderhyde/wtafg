@@ -18,8 +18,9 @@ public class Game
         entities.put(e.id, e);
     }
     
-    public <T> void add(Entity e, Class<T> c, T data)
+    public <T> void add(Entity e, T data)
     {
+        Class c = data.getClass();
         Map<Entity,Object> m = this.components.get(c);
         if (m==null)
         {

@@ -29,22 +29,22 @@ public class FightingGame
     {
         Entity player1 = new Entity();
         game.addEntity(player1);
-        game.add(player1, String.class, "Player 1");
-        game.add(player1, Rectangle.class, new Rectangle(10,600,20,50));
-        game.add(player1, PlayerControlComponent.class, new PlayerControlComponent("LEFT","RIGHT","UP","DOWN"));
-        game.add(player1, CombatPoseComponent.class, new CombatPoseComponent(CombatSystem.Pose.block));
+        game.add(player1, "Player 1");
+        game.add(player1, new Rectangle(10,600,20,50));
+        game.add(player1, new PlayerControlComponent("LEFT","RIGHT","UP","DOWN"));
+        game.add(player1, new CombatPoseComponent(CombatSystem.Pose.block));
 
         Entity player2 = new Entity();
         game.addEntity(player2);
-        game.add(player2, String.class, "Player 2");
-        game.add(player2, Rectangle.class, new Rectangle(200,600,20,50));
-        game.add(player2, PlayerControlComponent.class, new PlayerControlComponent("A","D","W","S"));
+        game.add(player2, "Player 2");
+        game.add(player2, new Rectangle(200,600,20,50));
+        game.add(player2, new PlayerControlComponent("A","D","W","S"));
 
         Entity dummy = new Entity();
         game.addEntity(dummy);
-        game.add(dummy, String.class, "Dummy player");
-        game.add(dummy, Rectangle.class, new Rectangle(450,600,20,50));
-        game.add(dummy, AIControlComponent.class, new AIControlComponent());
+        game.add(dummy, "Dummy player");
+        game.add(dummy, new Rectangle(450,600,20,50));
+        game.add(dummy, new AIControlComponent());
         
         System.out.println(game);
     }
