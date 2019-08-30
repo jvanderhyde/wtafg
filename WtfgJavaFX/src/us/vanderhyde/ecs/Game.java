@@ -38,6 +38,8 @@ public class Game
     @SuppressWarnings("unchecked") //The component is stored as an Object
     public <T> T get(Entity e, Class<T> c)
     {
+        if (this.components.get(c) == null)
+            return null;
         return (T)this.components.get(c).get(e);
     }
 

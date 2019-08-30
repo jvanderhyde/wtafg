@@ -31,7 +31,23 @@ public class ControlSystem
             CombatPoseComponent pose = g.get(e,CombatPoseComponent.class);
             if (pose != null)
             {
-                g.add(e, new CombatInputComponent(input.contains(control.left), input.contains(control.right), input.contains(control.attack), input.contains(control.flip)));
+                boolean canAttack = false;
+                boolean canFlip = false;
+                if (pose.pose==CombatSystem.Pose.block)
+                {
+                    ButtonReleaseComponent rel = g.get(e,ButtonReleaseComponent.class);
+                    if (rel != null)
+                    {
+                        if ((rel.attackReleased) && (input.contains(control.attack)))
+                            canAttack = true;
+                        if ((rel.flipReleased) && (input.contains(control.flip)))
+                            canFlip = true;
+                    }
+                    g.add(e, new ButtonReleaseComponent(!input.contains(control.attack),!input.contains(control.flip)));
+                }
+                else
+                    g.remove(e, ButtonReleaseComponent.class);
+                g.add(e, new CombatInputComponent(input.contains(control.left), input.contains(control.right), canAttack, canFlip));
             }
         }  
         
