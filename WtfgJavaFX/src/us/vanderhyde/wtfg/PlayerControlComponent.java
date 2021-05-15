@@ -14,4 +14,10 @@ public class PlayerControlComponent
         this.attack = attack;
         this.flip = flip;
     }
+    
+    @Override
+    public String toString()
+    {
+        return "PlayerControl:"+left+right+attack+flip;
+    }
 }

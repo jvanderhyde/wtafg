@@ -45,4 +45,10 @@ public class AIControlComponent
             }
         }
     }
+    
+    @Override
+    public String toString()
+    {
+        return "AIState:"+state+":"+timeLeftInState;
+    }
 }

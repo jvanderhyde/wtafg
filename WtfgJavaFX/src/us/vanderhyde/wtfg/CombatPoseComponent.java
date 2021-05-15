@@ -14,4 +14,9 @@ public class CombatPoseComponent
         timeLeft = pose.duration;
     }
     
+    @Override
+    public String toString()
+    {
+        return pose.toString()+":"+timeLeft;
+    }
 }

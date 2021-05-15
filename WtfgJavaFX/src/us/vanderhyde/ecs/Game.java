@@ -72,7 +72,7 @@ public class Game
                 if (o != null)
                     s = s.concat(o.toString()+" ");
             }
-            s = s.concat("} ");
+            s = s.concat("}\n  ");
         }
         return s.concat("]");
     }
