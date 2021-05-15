@@ -34,6 +34,15 @@ public class GraphicsSystem
                 if (c.pose==CombatSystem.Pose.recoverAttack)
                     gc.strokeLine(r.getX()+r.getWidth(), r.getY()+r.getHeight()/2, 
                                   r.getX()+r.getWidth()+4*4, r.getY()+r.getHeight()/2+3*4);
+                if (c.pose==CombatSystem.Pose.prepareThrow)
+                    gc.strokeRect(r.getX()+r.getWidth(), r.getY()+r.getHeight()-4*4, 
+                                  3*4, 4*4);
+                if (c.pose==CombatSystem.Pose.doThrow)
+                    gc.strokeRect(r.getX()+r.getWidth(), r.getY()+r.getHeight()/2, 
+                                  5*4, 4*4);
+                if (c.pose==CombatSystem.Pose.recoverThrow)
+                    gc.strokeRect(r.getX()+r.getWidth(), r.getY(), 
+                                  4*4, 4*4);
             }
             else
                 gc.setStroke(Color.BLACK);

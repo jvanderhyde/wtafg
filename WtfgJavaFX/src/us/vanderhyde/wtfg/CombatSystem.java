@@ -45,6 +45,8 @@ public class CombatSystem
             CombatInputComponent n = g.get(e,CombatInputComponent.class);
             if (n!=null && n.attack && c.pose==Pose.block)
                 g.add(e, new CombatPoseComponent(Pose.prepareAttack));
+            else if (n!=null && n.flip && c.pose==Pose.block)
+                g.add(e, new CombatPoseComponent(Pose.prepareThrow));
             else
             {
                 //Check for expiration of current pose
