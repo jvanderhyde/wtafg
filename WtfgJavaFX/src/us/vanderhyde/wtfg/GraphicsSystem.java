@@ -20,34 +20,43 @@ public class GraphicsSystem
         for (Entity e:g.getEntities(Rectangle.class))
         {
             Rectangle r = g.get(e,Rectangle.class);
+            double mid = r.getX()+r.getWidth()/2.0;
+            double dir = 1.0;
+            FacingDirection fac = g.get(e,FacingDirection.class);
+            if (fac != null)
+                if (fac.direction==MovementSystem.Facing.left)
+                    dir = -1;
+
             CombatPoseComponent c = g.get(e,CombatPoseComponent.class);
             if (c != null)
             {
                 gc.setStroke(Color.BLUE);
+                
                 //draw some different shapes based on pose
                 if (c.pose==CombatSystem.Pose.prepareAttack)
-                    gc.strokeLine(r.getX()+r.getWidth(), r.getY(), 
-                                  r.getX()+r.getWidth()+3*4, r.getY()-4*4);
+                    gc.strokeLine(mid+dir*r.getWidth()/2, r.getY(), 
+                                  mid+dir*(r.getWidth()/2+3*4), r.getY()-4*4);
                 if (c.pose==CombatSystem.Pose.attack)
-                    gc.strokeLine(r.getX()+r.getWidth(), r.getY()+r.getHeight()/2, 
-                                  r.getX()+r.getWidth()+5*4, r.getY()+r.getHeight()/2+0*4);
+                    gc.strokeLine(mid+dir*r.getWidth()/2, r.getY()+r.getHeight()/2, 
+                                  mid+dir*(r.getWidth()/2+5*4), r.getY()+r.getHeight()/2+0*4);
                 if (c.pose==CombatSystem.Pose.recoverAttack)
-                    gc.strokeLine(r.getX()+r.getWidth(), r.getY()+r.getHeight()/2, 
-                                  r.getX()+r.getWidth()+4*4, r.getY()+r.getHeight()/2+3*4);
+                    gc.strokeLine(mid+dir*r.getWidth()/2, r.getY()+r.getHeight()/2, 
+                                  mid+dir*(r.getWidth()/2+4*4), r.getY()+r.getHeight()/2+3*4);
                 if (c.pose==CombatSystem.Pose.prepareThrow)
-                    gc.strokeRect(r.getX()+r.getWidth(), r.getY()+r.getHeight()-4*4, 
+                    gc.strokeRect(mid-3*4/2+dir*(r.getWidth()+3*4)/2, r.getY()+r.getHeight()-4*4, 
                                   3*4, 4*4);
                 if (c.pose==CombatSystem.Pose.doThrow)
-                    gc.strokeRect(r.getX()+r.getWidth(), r.getY()+r.getHeight()/2, 
-                                  5*4, 4*4);
+                    gc.strokeRect(mid-5*4/2+dir*(r.getWidth()+5*4)/2, r.getY()+r.getHeight()/2, 
+                                  5*4, 1*4);
                 if (c.pose==CombatSystem.Pose.recoverThrow)
-                    gc.strokeRect(r.getX()+r.getWidth(), r.getY(), 
-                                  4*4, 4*4);
+                    gc.strokeRect(mid-4*4/2+dir*(r.getWidth()+4*4)/2, r.getY(), 
+                                  4*4, 3*4);
             }
             else
                 gc.setStroke(Color.BLACK);
             
             gc.strokeRect(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+            gc.strokeOval(mid+dir*8-2, r.getY()+8, 4, 4);
         }
     }
 }

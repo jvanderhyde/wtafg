@@ -5,12 +5,10 @@ package us.vanderhyde.wtfg;
 
 public class CombatInputComponent
 {
-    final boolean left, right, attack, flip;
+    final boolean attack, flip;
     
-    CombatInputComponent(boolean left, boolean right, boolean attack, boolean flip)
+    CombatInputComponent(boolean attack, boolean flip)
     {
-        this.left = left;
-        this.right = right;
         this.attack = attack;
         this.flip = flip;
     }

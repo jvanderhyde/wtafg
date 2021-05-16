@@ -4,7 +4,6 @@
 package us.vanderhyde.wtfg;
 
 import java.util.Collection;
-import javafx.scene.shape.Rectangle;
 import us.vanderhyde.ecs.Entity;
 import us.vanderhyde.ecs.Game;
 
@@ -12,22 +11,15 @@ public class ControlSystem
 {
     public static void update(Game g, Collection<String> input)
     {
-        //Update physics based on user input
+        //Update commands based on user input
         for (Entity e:g.getEntities(PlayerControlComponent.class))
         {
             PlayerControlComponent control = g.get(e,PlayerControlComponent.class);
             
-            //Move the rectangle
-            Rectangle r = g.get(e,Rectangle.class);
-            if (r != null)
-            {
-                if (input.contains(control.left))
-                    r.setX(r.getX()-2);
-                if (input.contains(control.right))
-                    r.setX(r.getX()+2);
-            }
+            //Add movement commands
+            g.add(e, new MovementInputComponent(input.contains(control.left), input.contains(control.right)));
             
-            //Add attack controls
+            //Add attack commands
             CombatPoseComponent pose = g.get(e,CombatPoseComponent.class);
             if (pose != null)
             {
@@ -47,23 +39,16 @@ public class ControlSystem
                 }
                 else
                     g.remove(e, ButtonReleaseComponent.class);
-                g.add(e, new CombatInputComponent(input.contains(control.left), input.contains(control.right), canAttack, canFlip));
+                g.add(e, new CombatInputComponent(canAttack, canFlip));
             }
         }  
         
-        //Update physics based on AI control
+        //Update commands based on AI control
         for (Entity e:g.getEntities(AIControlComponent.class))
         {
             AIControlComponent control = g.get(e,AIControlComponent.class);
             control.update();
-            Rectangle r = g.get(e,Rectangle.class);
-            if (r != null)
-            {
-                if (control.getState()==AIControlComponent.State.movingLeft)
-                    r.setX(r.getX()-2);
-                if (control.getState()==AIControlComponent.State.movingRight)
-                    r.setX(r.getX()+2);
-            }
+            g.add(e, new MovementInputComponent(control.getState()==AIControlComponent.State.movingLeft, control.getState()==AIControlComponent.State.movingRight));
         }
     }
     

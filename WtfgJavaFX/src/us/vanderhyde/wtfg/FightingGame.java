@@ -33,18 +33,22 @@ public class FightingGame
         game.add(player1, new Rectangle(10,600,20,50));
         game.add(player1, new PlayerControlComponent("LEFT","RIGHT","UP","DOWN"));
         game.add(player1, new CombatPoseComponent(CombatSystem.Pose.block));
+        game.add(player1, new FacingDirection(MovementSystem.Facing.right));
 
         Entity player2 = new Entity();
         game.addEntity(player2);
         game.add(player2, "Player 2");
         game.add(player2, new Rectangle(200,600,20,50));
         game.add(player2, new PlayerControlComponent("A","D","W","S"));
+        game.add(player2, new CombatPoseComponent(CombatSystem.Pose.block));
+        game.add(player2, new FacingDirection(MovementSystem.Facing.left));
 
         Entity dummy = new Entity();
         game.addEntity(dummy);
         game.add(dummy, "Dummy player");
         game.add(dummy, new Rectangle(450,600,20,50));
         game.add(dummy, new AIControlComponent());
+        game.add(dummy, new FacingDirection(MovementSystem.Facing.left));
         
         System.out.println(game);
     }
@@ -52,6 +56,7 @@ public class FightingGame
     public void update(long delta, Collection<String> input, GraphicsContext gc)
     {
         ControlSystem.update(game, input);
+        MovementSystem.update(game);
         CombatSystem.update(game);
         GraphicsSystem.render(game, gc);
     }
