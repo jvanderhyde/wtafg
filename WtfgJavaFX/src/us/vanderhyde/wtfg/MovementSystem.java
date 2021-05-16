@@ -15,22 +15,28 @@ public class MovementSystem
     
     public static void update(Game g)
     {
-        for (Entity e:g.getEntities(MovementInputComponent.class))
+        for (Entity e:g.getEntities(CombatPoseComponent.class))
         {
-            MovementInputComponent c = g.get(e,MovementInputComponent.class);
-            //Move the rectangle
+            CombatPoseComponent p = g.get(e,CombatPoseComponent.class);
+            FacingDirection f = g.get(e, FacingDirection.class);
             Rectangle r = g.get(e,Rectangle.class);
-            if (r != null)
+            if (r != null && f != null)
             {
-                if (c.left && !c.right)
+                if (p.pose==CombatSystem.Pose.walkForward)
                 {
-                    r.setX(r.getX()-2);
-                    g.add(e, new FacingDirection(Facing.left));
+                    //Move the rectangle
+                    if (f.direction==MovementSystem.Facing.left)
+                        r.setX(r.getX()-2);
+                    else
+                        r.setX(r.getX()+2);
                 }
-                if (c.right && !c.left)
+                else if (p.pose==CombatSystem.Pose.walkBackward)
                 {
-                    r.setX(r.getX()+2);
-                    g.add(e, new FacingDirection(Facing.right));
+                    //Move the rectangle
+                    if (f.direction==MovementSystem.Facing.right)
+                        r.setX(r.getX()-1);
+                    else
+                        r.setX(r.getX()+1);
                 }
             }
         }
