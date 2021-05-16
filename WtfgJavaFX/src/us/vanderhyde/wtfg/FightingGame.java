@@ -5,7 +5,6 @@ package us.vanderhyde.wtfg;
 
 import java.util.Collection;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.shape.Rectangle;
 import us.vanderhyde.ecs.Entity;
 import us.vanderhyde.ecs.Game;
 
@@ -30,7 +29,7 @@ public class FightingGame
         Entity player1 = new Entity();
         game.addEntity(player1);
         game.add(player1, "Player 1");
-        game.add(player1, new Rectangle(10,600,20,50));
+        game.add(player1, new FighterPosition(10));
         game.add(player1, new PlayerControlComponent("LEFT","RIGHT","UP","DOWN"));
         game.add(player1, new CombatPoseComponent(CombatSystem.Pose.block));
         game.add(player1, new FacingDirection(MovementSystem.Facing.right));
@@ -38,7 +37,7 @@ public class FightingGame
         Entity player2 = new Entity();
         game.addEntity(player2);
         game.add(player2, "Player 2");
-        game.add(player2, new Rectangle(200,600,20,50));
+        game.add(player2, new FighterPosition(200));
         game.add(player2, new PlayerControlComponent("A","D","W","S"));
         game.add(player2, new CombatPoseComponent(CombatSystem.Pose.block));
         game.add(player2, new FacingDirection(MovementSystem.Facing.left));
@@ -46,7 +45,7 @@ public class FightingGame
         Entity dummy = new Entity();
         game.addEntity(dummy);
         game.add(dummy, "Dummy player");
-        game.add(dummy, new Rectangle(450,600,20,50));
+        game.add(dummy, new FighterPosition(450));
         game.add(dummy, new AIControlComponent());
         game.add(dummy, new FacingDirection(MovementSystem.Facing.left));
         

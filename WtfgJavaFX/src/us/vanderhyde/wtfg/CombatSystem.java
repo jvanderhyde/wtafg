@@ -3,7 +3,6 @@
 
 package us.vanderhyde.wtfg;
 
-import javafx.scene.shape.Rectangle;
 import us.vanderhyde.ecs.Entity;
 import us.vanderhyde.ecs.Game;
 
@@ -54,12 +53,12 @@ public class CombatSystem
             else if (m!=null && (m.left || m.right) && p.pose==Pose.block)
             {
                 //Find closest opponent
-                double x = g.get(e, Rectangle.class).getX();
+                double x = g.get(e, FighterPosition.class).x;
                 double min = Double.POSITIVE_INFINITY;
-                for (Entity opp:g.getEntities(Rectangle.class))
+                for (Entity opp:g.getEntities(FighterPosition.class))
                 {
-                    Rectangle r = g.get(opp, Rectangle.class);
-                    double d = r.getX()-x;
+                    FighterPosition position = g.get(opp, FighterPosition.class);
+                    double d = position.x-x;
                     if ((d != 0) && (Math.abs(d)<Math.abs(min)))
                         min = d;
                 }
