@@ -47,6 +47,7 @@ public class FightingGame
         game.add(dummy, "Dummy player");
         game.add(dummy, new FighterPosition(450));
         game.add(dummy, new AIControlComponent());
+        game.add(dummy, new CombatPoseComponent(CombatSystem.Pose.block));
         game.add(dummy, new FacingDirection(MovementSystem.Facing.left));
         
         System.out.println(game);
