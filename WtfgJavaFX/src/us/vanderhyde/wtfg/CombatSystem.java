@@ -15,7 +15,7 @@ public class CombatSystem
         block(1), recoverBlock(3), 
         prepareAttack(2), attack(3), recoverAttack(5),
         prepareThrow(2), doThrow(3), recoverThrow(5),
-        thrown(10), blocked(6), attacked(10),
+        thrown(10), blocked(12), attacked(10),
         walkForward(10), walkBackward(10), turn(10);
         public final int duration;//in frames
         
@@ -42,9 +42,11 @@ public class CombatSystem
     };
     
     private final static Set<Pose> throwablePoses = new TreeSet<>();
+    private final static Set<Pose> attackablePoses = new TreeSet<>();
     static
     {
-        throwablePoses.addAll(Arrays.asList(Pose.block));
+        throwablePoses.addAll(Arrays.asList(Pose.block,Pose.walkBackward,Pose.walkForward));
+        attackablePoses.addAll(Arrays.asList(Pose.prepareThrow,Pose.doThrow,Pose.recoverThrow,Pose.blocked,Pose.walkBackward,Pose.walkForward,Pose.turn));
     }
     
     public static void update(Game g)
@@ -137,6 +139,33 @@ public class CombatSystem
                             //throw opponent
                             g.add(opp, new CombatPoseComponent(Pose.thrown));
                             g.add(opp, new FacingDirection(f.direction));
+                        }
+                    }
+                }
+            }
+            else if (p.pose==Pose.attack)
+            {
+                //Find opponents
+                double x = g.get(e, FighterPosition.class).x;
+                for (Entity opp:g.getEntities(FighterPosition.class))
+                {
+                    FighterPosition position = g.get(opp, FighterPosition.class);
+                    double d = position.x-x;
+                    if ((f.direction==MovementSystem.Facing.right && 10<=d && d<=40) ||
+                        (f.direction==MovementSystem.Facing.left && -10>=d && d>=-40))
+                    {
+                        //opponent is in range
+                        CombatPoseComponent opponentPose = g.get(opp,CombatPoseComponent.class);
+                        FacingDirection oppDir = g.get(opp, FacingDirection.class);
+                        if (attackablePoses.contains(opponentPose.pose) || oppDir.direction==f.direction)
+                        {
+                            //attack opponent
+                            g.add(opp, new CombatPoseComponent(Pose.attacked));
+                        }
+                        else if (opponentPose.pose==Pose.block)
+                        {
+                            //attack was blocked
+                            g.add(e, new CombatPoseComponent(Pose.blocked));
                         }
                     }
                 }
