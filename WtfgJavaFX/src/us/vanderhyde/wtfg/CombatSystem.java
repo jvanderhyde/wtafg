@@ -3,6 +3,9 @@
 
 package us.vanderhyde.wtfg;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
 import us.vanderhyde.ecs.Entity;
 import us.vanderhyde.ecs.Game;
 
@@ -38,6 +41,12 @@ public class CombatSystem
         }
     };
     
+    private final static Set<Pose> throwablePoses = new TreeSet<>();
+    static
+    {
+        throwablePoses.addAll(Arrays.asList(Pose.block));
+    }
+    
     public static void update(Game g)
     {
         for (Entity e:g.getEntities(CombatPoseComponent.class))
@@ -46,6 +55,8 @@ public class CombatSystem
             CombatInputComponent c = g.get(e,CombatInputComponent.class);
             MovementInputComponent m = g.get(e,MovementInputComponent.class);
             FacingDirection f = g.get(e, FacingDirection.class);
+            
+            //Resolve input cases
             if (c!=null && c.attack && p.pose==Pose.block)
                 g.add(e, new CombatPoseComponent(Pose.prepareAttack));
             else if (c!=null && c.flip && p.pose==Pose.block)
@@ -105,6 +116,30 @@ public class CombatSystem
                 p.timeLeft--;
                 if (p.timeLeft <= 0)
                     g.add(e, new CombatPoseComponent(p.pose.onExpire));
+            }
+            
+            //Resolve combat cases
+            if (p.pose==Pose.doThrow)
+            {
+                //Find opponents
+                double x = g.get(e, FighterPosition.class).x;
+                for (Entity opp:g.getEntities(FighterPosition.class))
+                {
+                    FighterPosition position = g.get(opp, FighterPosition.class);
+                    double d = position.x-x;
+                    if ((f.direction==MovementSystem.Facing.right && 10<=d && d<=40) ||
+                        (f.direction==MovementSystem.Facing.left && -10>=d && d>=-40))
+                    {
+                        //opponent is in range
+                        CombatPoseComponent opponentPose = g.get(opp,CombatPoseComponent.class);
+                        if (throwablePoses.contains(opponentPose.pose))
+                        {
+                            //throw opponent
+                            g.add(opp, new CombatPoseComponent(Pose.thrown));
+                            g.add(opp, new FacingDirection(f.direction));
+                        }
+                    }
+                }
             }
         }
     }

@@ -19,7 +19,7 @@ public class GraphicsSystem
         for (Entity e:g.getEntities(FighterPosition.class))
         {
             double x = g.get(e, FighterPosition.class).x;
-            double y = 600;
+            double y = 300;
             double w = 20;
             double h = 50;
             double dir = 1;
