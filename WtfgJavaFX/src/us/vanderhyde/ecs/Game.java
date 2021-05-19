@@ -56,7 +56,9 @@ public class Game
 
     public <T> Collection<Entity> getEntities(Class<T> c)
     {
-        return this.components.get(c).keySet();
+        if (this.components.get(c) != null)
+            return this.components.get(c).keySet();
+        else return new java.util.ArrayList<>();
     }
 
     @Override
