@@ -29,7 +29,7 @@ public class FightingGame
         Entity player1 = new Entity();
         game.addEntity(player1);
         game.add(player1, "Player 1");
-        game.add(player1, new FighterPosition(10));
+        game.add(player1, new FighterPosition(320-100));
         game.add(player1, new PlayerControlComponent("LEFT","RIGHT","DOWN","UP"));
         game.add(player1, new CombatPoseComponent(CombatSystem.Pose.block));
         game.add(player1, new FacingDirection(MovementSystem.Facing.right));
@@ -37,7 +37,7 @@ public class FightingGame
         Entity player2 = new Entity();
         game.addEntity(player2);
         game.add(player2, "Player 2");
-        game.add(player2, new FighterPosition(200));
+        game.add(player2, new FighterPosition(320+100));
         game.add(player2, new PlayerControlComponent("A","D","S","W"));
         game.add(player2, new CombatPoseComponent(CombatSystem.Pose.block));
         game.add(player2, new FacingDirection(MovementSystem.Facing.left));
