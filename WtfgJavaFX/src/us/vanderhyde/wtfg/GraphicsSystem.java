@@ -66,7 +66,9 @@ public class GraphicsSystem
                 if (c.pose==CombatSystem.Pose.blocked)
                     gc.strokeLine(x+dir*w/2, y+0, 
                                   x+dir*(w/2+0*size), y+0-5*size);
-                if (c.pose==CombatSystem.Pose.attacked)
+                if (c.pose==CombatSystem.Pose.attackedFromBehind)
+                    gc.setStroke(Color.DARKRED);
+                if (c.pose==CombatSystem.Pose.attackedFromFront)
                     gc.setStroke(Color.DARKRED);
                 if (c.pose==CombatSystem.Pose.walkForward)
                     gc.setStroke(Color.DARKGREEN);

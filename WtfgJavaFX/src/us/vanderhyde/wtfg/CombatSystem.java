@@ -15,7 +15,7 @@ public class CombatSystem
         block(1), recoverBlock(3), 
         prepareAttack(2), attack(3), recoverAttack(5),
         prepareThrow(2), doThrow(3), recoverThrow(5),
-        thrown(10), blocked(12), attacked(10),
+        thrown(10), blocked(12), attackedFromFront(10), attackedFromBehind(10),
         walkForward(10), walkBackward(10), turn(10);
         public final int duration;//in frames
         
@@ -34,7 +34,8 @@ public class CombatSystem
             recoverThrow.onExpire = block;
             thrown.onExpire = block;
             blocked.onExpire = block;
-            attacked.onExpire = block;
+            attackedFromFront.onExpire = block;
+            attackedFromBehind.onExpire = block;
             walkForward.onExpire = block;
             walkBackward.onExpire = block;
             turn.onExpire = block;
@@ -160,10 +161,15 @@ public class CombatSystem
                         //opponent is in range
                         CombatPoseComponent opponentPose = g.get(opp,CombatPoseComponent.class);
                         FacingDirection oppDir = g.get(opp, FacingDirection.class);
-                        if (attackablePoses.contains(opponentPose.pose) || oppDir.direction==f.direction)
+                        if (oppDir.direction==f.direction)
                         {
-                            //attack opponent
-                            g.add(opp, new CombatPoseComponent(Pose.attacked));
+                            //attack opponent from behind
+                            g.add(opp, new CombatPoseComponent(Pose.attackedFromBehind));
+                        }
+                        else if (attackablePoses.contains(opponentPose.pose))
+                        {
+                            //attack opponent from the front
+                            g.add(opp, new CombatPoseComponent(Pose.attackedFromFront));
                         }
                         else if (opponentPose.pose==Pose.block)
                         {

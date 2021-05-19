@@ -21,21 +21,21 @@ public class MovementSystem
             FighterPosition position = g.get(e, FighterPosition.class);
             if (position != null && f != null)
             {
-                if (p.pose==CombatSystem.Pose.walkForward)
+                double dir = 1;
+                if (((p.pose==CombatSystem.Pose.walkForward || p.pose==CombatSystem.Pose.attackedFromBehind) && 
+                     f.direction==MovementSystem.Facing.left) || 
+                    ((p.pose==CombatSystem.Pose.walkBackward || p.pose==CombatSystem.Pose.attackedFromFront) && 
+                     f.direction==MovementSystem.Facing.right))
+                    dir = -1;
+                if (p.pose==CombatSystem.Pose.walkForward ||
+                    p.pose==CombatSystem.Pose.attackedFromBehind ||
+                    p.pose==CombatSystem.Pose.attackedFromFront)
                 {
-                    //Move the rectangle
-                    if (f.direction==MovementSystem.Facing.left)
-                        g.add(e, new FighterPosition(position.x-2));
-                    else
-                        g.add(e, new FighterPosition(position.x+2));
+                    g.add(e, new FighterPosition(position.x+2*dir));
                 }
                 else if (p.pose==CombatSystem.Pose.walkBackward)
                 {
-                    //Move the rectangle
-                    if (f.direction==MovementSystem.Facing.right)
-                        g.add(e, new FighterPosition(position.x-1));
-                    else
-                        g.add(e, new FighterPosition(position.x+1));
+                    g.add(e, new FighterPosition(position.x+1*dir));
                 }
             }
         }
