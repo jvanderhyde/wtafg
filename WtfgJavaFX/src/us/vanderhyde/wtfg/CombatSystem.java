@@ -41,13 +41,16 @@ public class CombatSystem
         }
     };
     
-    private final static Set<Pose> throwablePoses = new TreeSet<>();
-    private final static Set<Pose> attackablePoses = new TreeSet<>();
+    private static final Set<Pose> throwablePoses = new TreeSet<>();
+    private static final Set<Pose> attackablePoses = new TreeSet<>();
     static
     {
         throwablePoses.addAll(Arrays.asList(Pose.block,Pose.walkBackward,Pose.walkForward));
         attackablePoses.addAll(Arrays.asList(Pose.prepareThrow,Pose.doThrow,Pose.recoverThrow,Pose.blocked,Pose.walkBackward,Pose.walkForward,Pose.turn));
     }
+    
+    private static final double minHitDistance = 15;
+    private static final double maxHitDistance = 60;
     
     public static void update(Game g)
     {
@@ -129,8 +132,8 @@ public class CombatSystem
                 {
                     FighterPosition position = g.get(opp, FighterPosition.class);
                     double d = position.x-x;
-                    if ((f.direction==MovementSystem.Facing.right && 10<=d && d<=40) ||
-                        (f.direction==MovementSystem.Facing.left && -10>=d && d>=-40))
+                    if ((f.direction==MovementSystem.Facing.right && minHitDistance<=d && d<=maxHitDistance) ||
+                        (f.direction==MovementSystem.Facing.left && -minHitDistance>=d && d>=-maxHitDistance))
                     {
                         //opponent is in range
                         CombatPoseComponent opponentPose = g.get(opp,CombatPoseComponent.class);
@@ -151,8 +154,8 @@ public class CombatSystem
                 {
                     FighterPosition position = g.get(opp, FighterPosition.class);
                     double d = position.x-x;
-                    if ((f.direction==MovementSystem.Facing.right && 10<=d && d<=40) ||
-                        (f.direction==MovementSystem.Facing.left && -10>=d && d>=-40))
+                    if ((f.direction==MovementSystem.Facing.right && minHitDistance<=d && d<=maxHitDistance) ||
+                        (f.direction==MovementSystem.Facing.left && -minHitDistance>=d && d>=-maxHitDistance))
                     {
                         //opponent is in range
                         CombatPoseComponent opponentPose = g.get(opp,CombatPoseComponent.class);

@@ -17,7 +17,7 @@ public class WtfgJavaFX extends Application
     @Override
     public void start(Stage primaryStage)
     {
-        final Canvas canvas = new Canvas(640, 360);
+        final Canvas canvas = new Canvas(640, 240);
         final Group root = new Group();
         root.getChildren().add( canvas );
         final Scene scene = new Scene(root);
