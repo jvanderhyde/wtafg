@@ -68,117 +68,130 @@ public class CombatSystem
             else if (c!=null && c.flip && p.pose==Pose.block)
                 g.add(e, new CombatPoseComponent(Pose.prepareThrow));
             else if (m!=null && (m.left || m.right) && p.pose==Pose.block)
-            {
-                //Find closest opponent
-                double x = g.get(e, FighterPosition.class).x;
-                double min = Double.POSITIVE_INFINITY;
-                for (Entity opp:g.getEntities(FighterPosition.class))
-                {
-                    FighterPosition position = g.get(opp, FighterPosition.class);
-                    double d = position.x-x;
-                    if ((d != 0) && (Math.abs(d)<Math.abs(min)))
-                        min = d;
-                }
-                
-                //Move or turn
-                if (m.left && !m.right && min<0)
-                {
-                    if (f.direction==MovementSystem.Facing.left)
-                        g.add(e, new CombatPoseComponent(Pose.walkForward));
-                    else
-                    {
-                        g.add(e, new CombatPoseComponent(Pose.turn));
-                        g.add(e, new FacingDirection(MovementSystem.Facing.left));
-                    }
-                }
-                else if (m.right && !m.left && min>0)
-                {
-                    if (f.direction==MovementSystem.Facing.right)
-                        g.add(e, new CombatPoseComponent(Pose.walkForward));
-                    else
-                    {
-                        g.add(e, new CombatPoseComponent(Pose.turn));
-                        g.add(e, new FacingDirection(MovementSystem.Facing.right));
-                    }
-                }
-                else if (m.left && !m.right && min>0)
-                {
-                    if (f.direction==MovementSystem.Facing.left)
-                        g.add(e, new CombatPoseComponent(Pose.walkForward));
-                    else
-                        g.add(e, new CombatPoseComponent(Pose.walkBackward));
-                }
-                else if (m.right && !m.left && min<0)
-                {
-                    if (f.direction==MovementSystem.Facing.right)
-                        g.add(e, new CombatPoseComponent(Pose.walkForward));
-                    else
-                        g.add(e, new CombatPoseComponent(Pose.walkBackward));
-                }
-            }
+                moveOrTurn(g, e, m, f);
             else
-            {
-                //Check for expiration of current pose
-                p.timeLeft--;
-                if (p.timeLeft <= 0)
-                    g.add(e, new CombatPoseComponent(p.pose.onExpire));
-            }
+                decrementPoseTime(g, e, p);
             
             //Resolve combat cases
             if (p.pose==Pose.doThrow)
-            {
-                //Find opponents
-                double x = g.get(e, FighterPosition.class).x;
-                for (Entity opp:g.getEntities(FighterPosition.class))
-                {
-                    FighterPosition position = g.get(opp, FighterPosition.class);
-                    double d = position.x-x;
-                    if ((f.direction==MovementSystem.Facing.right && minHitDistance<=d && d<=maxHitDistance) ||
-                        (f.direction==MovementSystem.Facing.left && -minHitDistance>=d && d>=-maxHitDistance))
-                    {
-                        //opponent is in range
-                        CombatPoseComponent opponentPose = g.get(opp,CombatPoseComponent.class);
-                        if (throwablePoses.contains(opponentPose.pose))
-                        {
-                            //throw opponent
-                            g.add(opp, new CombatPoseComponent(Pose.thrown));
-                            g.add(opp, new FacingDirection(f.direction));
-                        }
-                    }
-                }
-            }
+                doThrow(g, e, f);
             else if (p.pose==Pose.attack)
+                doAttack(g, e, f);
+        }
+    }
+
+    private static void moveOrTurn(Game g, Entity e, MovementInputComponent m, FacingDirection f)
+    {
+        //Find closest opponent
+        double x = g.get(e, FighterPosition.class).x;
+        double min = Double.POSITIVE_INFINITY;
+        for (Entity opp:g.getEntities(FighterPosition.class))
+        {
+            FighterPosition position = g.get(opp, FighterPosition.class);
+            double d = position.x-x;
+            if ((d != 0) && (Math.abs(d)<Math.abs(min)))
+                min = d;
+        }
+        
+        //Move or turn
+        if (m.left && !m.right && min<0)
+        {
+            if (f.direction==MovementSystem.Facing.left)
+                g.add(e, new CombatPoseComponent(Pose.walkForward));
+            else
             {
-                //Find opponents
-                double x = g.get(e, FighterPosition.class).x;
-                for (Entity opp:g.getEntities(FighterPosition.class))
+                g.add(e, new CombatPoseComponent(Pose.turn));
+                g.add(e, new FacingDirection(MovementSystem.Facing.left));
+            }
+        }
+        else if (m.right && !m.left && min>0)
+        {
+            if (f.direction==MovementSystem.Facing.right)
+                g.add(e, new CombatPoseComponent(Pose.walkForward));
+            else
+            {
+                g.add(e, new CombatPoseComponent(Pose.turn));
+                g.add(e, new FacingDirection(MovementSystem.Facing.right));
+            }
+        }
+        else if (m.left && !m.right && min>0)
+        {
+            if (f.direction==MovementSystem.Facing.left)
+                g.add(e, new CombatPoseComponent(Pose.walkForward));
+            else
+                g.add(e, new CombatPoseComponent(Pose.walkBackward));
+        }
+        else if (m.right && !m.left && min<0)
+        {
+            if (f.direction==MovementSystem.Facing.right)
+                g.add(e, new CombatPoseComponent(Pose.walkForward));
+            else
+                g.add(e, new CombatPoseComponent(Pose.walkBackward));
+        }
+    }
+
+    private static void decrementPoseTime(Game g, Entity e, CombatPoseComponent p)
+    {
+        //Check for expiration of current pose
+        p.timeLeft--;
+        if (p.timeLeft <= 0)
+            g.add(e, new CombatPoseComponent(p.pose.onExpire));
+    }
+
+    private static void doThrow(Game g, Entity e, FacingDirection f)
+    {
+        //Find opponents
+        double x = g.get(e, FighterPosition.class).x;
+        for (Entity opp:g.getEntities(FighterPosition.class))
+        {
+            FighterPosition position = g.get(opp, FighterPosition.class);
+            double d = position.x-x;
+            if ((f.direction==MovementSystem.Facing.right && minHitDistance<=d && d<=maxHitDistance) ||
+                    (f.direction==MovementSystem.Facing.left && -minHitDistance>=d && d>=-maxHitDistance))
+            {
+                //opponent is in range
+                CombatPoseComponent opponentPose = g.get(opp,CombatPoseComponent.class);
+                if (throwablePoses.contains(opponentPose.pose))
                 {
-                    FighterPosition position = g.get(opp, FighterPosition.class);
-                    double d = position.x-x;
-                    if ((f.direction==MovementSystem.Facing.right && minHitDistance<=d && d<=maxHitDistance) ||
-                        (f.direction==MovementSystem.Facing.left && -minHitDistance>=d && d>=-maxHitDistance))
-                    {
-                        //opponent is in range
-                        CombatPoseComponent opponentPose = g.get(opp,CombatPoseComponent.class);
-                        FacingDirection oppDir = g.get(opp, FacingDirection.class);
-                        if (oppDir.direction==f.direction)
-                        {
-                            //attack opponent from behind
-                            g.add(opp, new CombatPoseComponent(Pose.attackedFromBehind));
-                        }
-                        else if (attackablePoses.contains(opponentPose.pose))
-                        {
-                            //attack opponent from the front
-                            g.add(opp, new CombatPoseComponent(Pose.attackedFromFront));
-                        }
-                        else if (opponentPose.pose==Pose.block)
-                        {
-                            //attack was blocked
-                            g.add(e, new CombatPoseComponent(Pose.blocked));
-                        }
-                    }
+                    //throw opponent
+                    g.add(opp, new CombatPoseComponent(Pose.thrown));
+                    g.add(opp, new FacingDirection(f.direction));
                 }
             }
         }
     }
+
+    private static void doAttack(Game g, Entity e, FacingDirection f)
+    {
+        //Find opponents
+        double x = g.get(e, FighterPosition.class).x;
+        for (Entity opp:g.getEntities(FighterPosition.class))
+        {
+            FighterPosition position = g.get(opp, FighterPosition.class);
+            double d = position.x-x;
+            if ((f.direction==MovementSystem.Facing.right && minHitDistance<=d && d<=maxHitDistance) ||
+                    (f.direction==MovementSystem.Facing.left && -minHitDistance>=d && d>=-maxHitDistance))
+            {
+                //opponent is in range
+                CombatPoseComponent opponentPose = g.get(opp,CombatPoseComponent.class);
+                FacingDirection oppDir = g.get(opp, FacingDirection.class);
+                if (oppDir.direction==f.direction)
+                {
+                    //attack opponent from behind
+                    g.add(opp, new CombatPoseComponent(Pose.attackedFromBehind));
+                }
+                else if (attackablePoses.contains(opponentPose.pose))
+                {
+                    //attack opponent from the front
+                    g.add(opp, new CombatPoseComponent(Pose.attackedFromFront));
+                }
+                else if (opponentPose.pose==Pose.block)
+                {
+                    //attack was blocked
+                    g.add(e, new CombatPoseComponent(Pose.blocked));
+                }
+            }
+        }
+    }
+
 }
