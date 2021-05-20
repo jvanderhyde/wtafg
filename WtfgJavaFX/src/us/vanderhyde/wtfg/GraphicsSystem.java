@@ -5,6 +5,7 @@ package us.vanderhyde.wtfg;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import us.vanderhyde.ecs.Entity;
 import us.vanderhyde.ecs.Game;
 
@@ -16,7 +17,7 @@ public class GraphicsSystem
         double canvasHeight = gc.getCanvas().getHeight();
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), canvasHeight);
         
-        //Draw everything
+        //Draw all the fighters
         for (Entity e:g.getEntities(FighterPosition.class))
         {
             double x = g.get(e, FighterPosition.class).x;
@@ -88,6 +89,28 @@ public class GraphicsSystem
             
             gc.strokeRect(x-w/2, y, w, h);
             gc.strokeOval(x+dir*2*size-size/2, y+2*size, size, size);
+            TeamName team = g.get(e, TeamName.class);
+            if (team != null)
+                gc.fillText(team.name, x-size, y+8*size);
+        }
+        
+        //Draw the scores
+        double x = 0;
+        int teamNumber = 1;
+        gc.setFont(Font.font(36));
+        for (Entity e:g.getEntities(ScoreComponent.class))
+        {
+            ScoreComponent score = g.get(e, ScoreComponent.class);
+            String name = ""+teamNumber;
+            TeamName team = g.get(e, TeamName.class);
+            if (team != null) name = team.name;
+            for (int i=0; i<score.score; i++)
+            {
+                gc.fillText(name, x, 50);
+                x+=15;
+            }
+            x+=30;
+            teamNumber++;
         }
     }
 }

@@ -33,6 +33,8 @@ public class FightingGame
         game.add(player1, new PlayerControlComponent("LEFT","RIGHT","DOWN","UP"));
         game.add(player1, new CombatPoseComponent(CombatSystem.Pose.block));
         game.add(player1, new FacingDirection(MovementSystem.Facing.left));
+        game.add(player1, new ScoreComponent(0));
+        game.add(player1, new TeamName("🌞"));
 
         Entity player2 = new Entity();
         game.addEntity(player2);
@@ -41,6 +43,8 @@ public class FightingGame
         game.add(player2, new PlayerControlComponent("A","D","S","W"));
         game.add(player2, new CombatPoseComponent(CombatSystem.Pose.block));
         game.add(player2, new FacingDirection(MovementSystem.Facing.right));
+        game.add(player2, new ScoreComponent(0));
+        game.add(player2, new TeamName("🌜"));
 
         /*Entity dummy = new Entity();
         game.addEntity(dummy);
@@ -58,6 +62,7 @@ public class FightingGame
         ControlSystem.update(game, input);
         MovementSystem.update(game);
         CombatSystem.update(game);
+        ScoreSystem.update(game);
         GraphicsSystem.render(game, gc);
     }
 }

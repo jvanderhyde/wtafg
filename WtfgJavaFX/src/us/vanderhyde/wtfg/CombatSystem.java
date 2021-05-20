@@ -165,6 +165,7 @@ public class CombatSystem
     {
         //Find opponents
         double x = g.get(e, FighterPosition.class).x;
+        int numPoints = 0;
         for (Entity opp:g.getEntities(FighterPosition.class))
         {
             FighterPosition position = g.get(opp, FighterPosition.class);
@@ -175,15 +176,17 @@ public class CombatSystem
                 //opponent is in range
                 CombatPoseComponent opponentPose = g.get(opp,CombatPoseComponent.class);
                 FacingDirection oppDir = g.get(opp, FacingDirection.class);
-                if (oppDir.direction==f.direction)
+                if ((oppDir.direction==f.direction) && (opponentPose.pose != Pose.attackedFromBehind))
                 {
                     //attack opponent from behind
                     g.add(opp, new CombatPoseComponent(Pose.attackedFromBehind));
+                    numPoints++;
                 }
                 else if (attackablePoses.contains(opponentPose.pose))
                 {
                     //attack opponent from the front
                     g.add(opp, new CombatPoseComponent(Pose.attackedFromFront));
+                    numPoints++;
                 }
                 else if (opponentPose.pose==Pose.block)
                 {
@@ -193,6 +196,8 @@ public class CombatSystem
                 }
             }
         }
+        if (numPoints > 0)
+            g.add(e, new PointComponent(numPoints));
     }
 
 }
