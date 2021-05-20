@@ -15,7 +15,7 @@ public class CombatSystem
         block(1), recoverBlock(3), 
         prepareAttack(2), attack(3), recoverAttack(5),
         prepareThrow(2), doThrow(3), recoverThrow(5),
-        thrown(10), blocked(12), attackedFromFront(10), attackedFromBehind(10),
+        thrown(10), blocked(15), attackedFromFront(10), attackedFromBehind(10),
         walkForward(10), walkBackward(10), turn(10);
         public final int duration;//in frames
         
@@ -47,7 +47,7 @@ public class CombatSystem
     static
     {
         throwablePoses.addAll(Arrays.asList(Pose.block,Pose.walkBackward,Pose.walkForward));
-        attackablePoses.addAll(Arrays.asList(Pose.prepareThrow,Pose.doThrow,Pose.recoverThrow,Pose.blocked,Pose.walkBackward,Pose.walkForward,Pose.turn));
+        attackablePoses.addAll(Arrays.asList(Pose.recoverBlock,Pose.prepareThrow,Pose.doThrow,Pose.recoverThrow,Pose.blocked,Pose.turn));
     }
     
     private static final double minHitDistance = 15;
@@ -189,6 +189,7 @@ public class CombatSystem
                 {
                     //attack was blocked
                     g.add(e, new CombatPoseComponent(Pose.blocked));
+                    g.add(opp, new CombatPoseComponent(Pose.recoverBlock));
                 }
             }
         }

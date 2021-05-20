@@ -58,7 +58,7 @@ public class GraphicsSystem
                     gc.strokeRect(x-1*size/2+dir*(w+1*size)/2, y+2*size, 
                                   1*size, 5*size);
                 if (c.pose==CombatSystem.Pose.recoverBlock)
-                    gc.strokeRect(x-1*size/2+dir*(w+1*size)/2, y+1*size, 
+                    gc.strokeRect(x-1*size/2+dir*(w+1*size)/2, y+3*size, 
                                   1*size, 5*size);
                 if (c.pose==CombatSystem.Pose.thrown)
                     gc.strokeRect(x+1*size/2+dir*(w-1*size)/2, y+2*size, 
@@ -70,10 +70,12 @@ public class GraphicsSystem
                     gc.setStroke(Color.DARKRED);
                 if (c.pose==CombatSystem.Pose.attackedFromFront)
                     gc.setStroke(Color.DARKRED);
-                if (c.pose==CombatSystem.Pose.walkForward)
+                if (c.pose==CombatSystem.Pose.walkForward || c.pose==CombatSystem.Pose.walkBackward)
+                {
                     gc.setStroke(Color.DARKGREEN);
-                if (c.pose==CombatSystem.Pose.walkBackward)
-                    gc.setStroke(Color.DARKGREEN);
+                    gc.strokeRect(x-1*size/2+dir*(w+1*size)/2, y+2*size, 
+                                  1*size, 5*size);
+                }
                 if (c.pose==CombatSystem.Pose.turn)
                 {
                     gc.setStroke(Color.DARKGREEN);
