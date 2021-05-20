@@ -38,9 +38,10 @@ public class Game
     @SuppressWarnings("unchecked") //The component is stored as an Object
     public <T> T get(Entity e, Class<T> c)
     {
-        if (this.components.get(c) == null)
+        Map<Entity,Object> m = this.components.get(c);
+        if (m == null)
             return null;
-        return (T)this.components.get(c).get(e);
+        return (T)m.get(e);
     }
 
     public Collection<Entity> getEntities()
@@ -51,14 +52,18 @@ public class Game
     //This is the fastest way to get all the components, but the code is ugly.
     public <T> Collection<Map.Entry<Entity,Object>> getEntityEntries(Class<T> c)
     {
-        return this.components.get(c).entrySet();
+        Map<Entity,Object> m = this.components.get(c);
+        if (m != null)
+            return m.entrySet();
+        else return new java.util.TreeSet<>();
     }
 
     public <T> Collection<Entity> getEntities(Class<T> c)
     {
-        if (this.components.get(c) != null)
-            return this.components.get(c).keySet();
-        else return new java.util.ArrayList<>();
+        Map<Entity,Object> m = this.components.get(c);
+        if (m != null)
+            return m.keySet();
+        else return new java.util.TreeSet<>();
     }
 
     @Override
