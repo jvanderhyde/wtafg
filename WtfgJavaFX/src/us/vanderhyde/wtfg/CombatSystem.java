@@ -71,8 +71,14 @@ public class CombatSystem
                 moveOrTurn(g, e, m, f);
             else
                 decrementPoseTime(g, e, p);
-            
+        }
+        for (Entity e:g.getEntities(CombatPoseComponent.class))
+        {
+            CombatPoseComponent p = g.get(e,CombatPoseComponent.class);
+            FacingDirection f = g.get(e, FacingDirection.class);
+
             //Resolve combat cases
+            //This can modify the pose of an opponent.
             if (p.pose==Pose.doThrow)
                 doThrow(g, e, f);
             else if (p.pose==Pose.attack)

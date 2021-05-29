@@ -12,27 +12,57 @@ public class Game
 {
     private final Map<UUID,Entity> entities = new HashMap<>();
     private final Map<Class,Map<Entity,Object>> components = new HashMap<>();
+
+    private Map<Class,Map<Entity,Object>> addedComponents = new HashMap<>();
+    private Map<Class,Entity> removedComponents = new HashMap<>();
     
     public void addEntity(Entity e)
     {
         entities.put(e.id, e);
     }
     
+    public void removeEntity(Entity e)
+    {
+        entities.remove(e.id);
+    }
+    
     public <T> void add(Entity e, T data)
     {
         Class c = data.getClass();
-        Map<Entity,Object> m = this.components.get(c);
+        Map<Entity,Object> m = this.addedComponents.get(c);
         if (m==null)
         {
             m = new HashMap<>();
-            this.components.put(c, m);
+            this.addedComponents.put(c, m);
         }
         m.put(e, data);
     }
     
     public void remove(Entity e, Class c)
     {
-        this.components.get(c).remove(e);
+        this.removedComponents.put(c,e);
+    }
+    
+    public void commit()
+    {
+        for (Map.Entry<Class,Map<Entity,Object>> entry : this.addedComponents.entrySet())
+        {
+            Class c = entry.getKey();
+            Map<Entity,Object> addedComponentsOfThisType = entry.getValue();
+            Map<Entity,Object> m = this.components.get(c);
+            if (m != null)
+                m.putAll(addedComponentsOfThisType);
+            else
+                this.components.put(c, addedComponentsOfThisType);            
+        }
+        for (Map.Entry<Class,Entity> entry : this.removedComponents.entrySet())
+        {
+            Class c = entry.getKey();
+            Entity removedComponentOfThisType = entry.getValue();
+            this.components.get(c).remove(removedComponentOfThisType);
+        }
+        this.addedComponents = new HashMap<>();
+        this.removedComponents = new HashMap<>();
     }
     
     @SuppressWarnings("unchecked") //The component is stored as an Object

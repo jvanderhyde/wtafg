@@ -54,6 +54,7 @@ public class FightingGame
         game.add(dummy, new CombatPoseComponent(CombatSystem.Pose.block));
         game.add(dummy, new FacingDirection(MovementSystem.Facing.left));*/
         
+        game.commit();
         System.out.println(game);
     }
     
@@ -63,6 +64,7 @@ public class FightingGame
         MovementSystem.update(game);
         CombatSystem.update(game);
         ScoreSystem.update(game);
+        game.commit();
         GraphicsSystem.render(game, gc);
     }
 }

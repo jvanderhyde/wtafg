@@ -13,4 +13,9 @@ public class CombatInputComponent
         this.flip = flip;
     }
     
+    @Override
+    public String toString()
+    {
+        return "CombatInput:"+(attack?"attack":"")+(flip?"flip":"");
+    }
 }

@@ -12,4 +12,10 @@ public class ButtonReleaseComponent
         this.attackReleased = attackReleased;
         this.flipReleased = flipReleased;
     }
+    
+    @Override
+    public String toString()
+    {
+        return "ButtonRelease:"+(attackReleased?"attack":"")+(flipReleased?"flip":"");
+    }
 }
