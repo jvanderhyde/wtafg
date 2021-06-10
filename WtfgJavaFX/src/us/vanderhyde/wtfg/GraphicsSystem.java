@@ -83,6 +83,16 @@ public class GraphicsSystem
                     dir = 0;
                 }
                 
+                //Hitbox graphics
+                gc.save();
+                gc.setStroke(Color.LIGHTBLUE);
+                gc.strokeLine(x, y, x, y+h);
+                if (c.pose==CombatSystem.Pose.doThrow || c.pose==CombatSystem.Pose.attack)
+                {
+                    gc.strokeLine(x+dir*CombatSystem.minHitDistance, y+h/2,
+                                  x+dir*CombatSystem.maxHitDistance, y+h/2);
+                }
+                gc.restore();
             }
             else
                 gc.setStroke(Color.BLACK);

@@ -50,8 +50,8 @@ public class CombatSystem
         attackablePoses.addAll(Arrays.asList(Pose.recoverBlock,Pose.prepareThrow,Pose.doThrow,Pose.recoverThrow,Pose.blocked,Pose.turn));
     }
     
-    private static final double minHitDistance = 15;
-    private static final double maxHitDistance = 60;
+    static final double minHitDistance = 15;
+    static final double maxHitDistance = 60;
     
     public static void update(Game g)
     {
